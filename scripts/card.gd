@@ -9,7 +9,7 @@ enum CardType {
 enum CardTarget {
 	PLAYER,
 	SINGLE_ENEMY,
-	MULTIPLE_ENEMY,	
+	MULTIPLE_ENEMY,
 	AOE,
 }
 
@@ -17,6 +17,6 @@ enum CardTarget {
 @export var name: String
 @export var description: String
 @export var energy_cost: int
-@export var type: int # Use CardType enum
-@export var target: int # Use CardTarget enum
-@export var effects: Dictionary
+@export var type: CardType
+@export var target: CardTarget
+@export var effects: Array[Dictionary]

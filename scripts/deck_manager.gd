@@ -1,14 +1,14 @@
 extends Node
 
-var all_cards: Dictionary = {}
+var deck: Array[CardData] =[]
 
 func _ready():
-	load_cards_from_json("res://data/cards.json")
+	load_cards_from_json("res://data/deck.tres")
 
 func load_cards_from_json(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.READ)	
 	if not file:
-		push_error("Failed to open cards.json")
+		push_error("Failed to open deck.tres")
 		return
 
 	var json_text = file.get_as_text()
@@ -25,9 +25,9 @@ func load_cards_from_json(path: String) -> void:
 			card.target = card_data.get("target", "")
 			card.effects = card_data.get("effects", {})
 
-			all_cards[card.id] = card
+			deck[card.id] = card
 	else:
-		push_error("cards.json is not a valid array")
+		push_error("deck.json is not a valid array")
 
-func get_card_by_id(card_id: String) -> CardData:
-	return all_cards.get(card_id, null)
+#func get_card_by_id(card_id: String) -> CardData:
+	#return deck.find() card_id
