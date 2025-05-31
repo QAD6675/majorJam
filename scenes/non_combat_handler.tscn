@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bquantxe37elp"]
+[gd_scene load_steps=4 format=3 uid="uid://bquantxe37elp"]
 
 [ext_resource type="PackedScene" uid="uid://dafp1ywt2i5tv" path="res://scenes/shop_scene.tscn" id="1_2jq1k"]
 [ext_resource type="PackedScene" uid="uid://c504segqeniul" path="res://scenes/vault_scene.tscn" id="2_a4yrb"]
 [ext_resource type="PackedScene" uid="uid://d2jkelqhoe27s" path="res://scenes/smith_scene.tscn" id="3_elmpe"]
-[ext_resource type="PackedScene" uid="uid://e56r0n43o7rq" path="res://scenes/rewards_scene.tscn" id="4_a4yrb"]
 
 [node name="nonCombatHandler" type="Node2D"]
 
@@ -12,5 +11,3 @@
 [node name="vaultScene" parent="." instance=ExtResource("2_a4yrb")]
 
 [node name="smithScene" parent="." instance=ExtResource("3_elmpe")]
-
-[node name="RewardsScene" parent="." instance=ExtResource("4_a4yrb")]

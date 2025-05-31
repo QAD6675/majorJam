@@ -2,15 +2,25 @@ extends Resource
 class_name CardData
 
 enum CardType {
-	ATTACK,
-	SPELL
+	attack,
+	spell
 }
 
 enum CardTarget {
-	PLAYER,
-	SINGLE_ENEMY,
-	MULTIPLE_ENEMY,
-	AOE,
+	player,
+	enemy,
+	aoe,
+}
+
+enum CardEffect {
+	damage,
+	block,
+	poison,
+	weaken,
+	buff_def,
+	buff_dmg,
+	draw,
+	exauhst
 }
 
 @export var id: String
