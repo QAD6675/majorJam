@@ -4,23 +4,41 @@
 [ext_resource type="PackedScene" uid="uid://2otejer28j4r" path="res://scenes/combat_handler.tscn" id="1_s3esy"]
 [ext_resource type="PackedScene" uid="uid://bquantxe37elp" path="res://scenes/non_combat_handler.tscn" id="3_0rdsr"]
 [ext_resource type="PackedScene" uid="uid://dg2ie81inyyw7" path="res://scenes/ui_overlay.tscn" id="4_ipu61"]
-[ext_resource type="PackedScene" uid="uid://hox65lpc2236" path="res://scenes/game_state.tscn" id="5_ygxny"]
+[ext_resource type="Script" uid="uid://cw50t0y3dgch7" path="res://scripts/game_state.gd" id="5_ygxny"]
 [ext_resource type="PackedScene" uid="uid://du28yn6whckw" path="res://scenes/fx_manager.tscn" id="6_wi4c7"]
 
 [node name="mainGame" type="Node2D"]
 
 [node name="mapHandler" parent="." instance=ExtResource("1_72e8q")]
+unique_name_in_owner = true
 
 [node name="combatHandler" parent="." instance=ExtResource("1_s3esy")]
+unique_name_in_owner = true
 
 [node name="nonCombatHandler" parent="." instance=ExtResource("3_0rdsr")]
+unique_name_in_owner = true
+
+[node name="RewardsHandler" type="Node2D" parent="."]
+unique_name_in_owner = true
 
 [node name="UIOverlay" parent="." instance=ExtResource("4_ipu61")]
 
-[node name="gameState" parent="." instance=ExtResource("5_ygxny")]
+[node name="gameState" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_ygxny")
+
+[node name="playerStats" type="ResourcePreloader" parent="gameState"]
+
+[node name="deckManager" type="Node2D" parent="gameState"]
+
+[node name="collectiblesManager" type="Node2D" parent="gameState"]
+position = Vector2(0, 2)
 
 [node name="audioManager" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
 
 [node name="transitionHandler" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
 
 [node name="FXManager" parent="." instance=ExtResource("6_wi4c7")]
+unique_name_in_owner = true
