@@ -6,28 +6,27 @@
 [sub_resource type="CanvasTexture" id="CanvasTexture_ukcvp"]
 
 [node name="MainMenu" type="CanvasLayer"]
-
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(4, 4)
+follow_viewport_enabled = true
 
 [node name="background" type="Sprite2D" parent="."]
 modulate = Color(0.925875, 0.543756, 0.319632, 1)
-position = Vector2(0.5, 0)
-scale = Vector2(287, 162)
+position = Vector2(-6.85453e-06, 0)
+scale = Vector2(288, 162)
 texture = SubResource("CanvasTexture_ukcvp")
 
 [node name="play" type="Button" parent="."]
 offset_left = -30.0
-offset_top = -24.0
+offset_top = -8.0
 offset_right = 30.0
+offset_bottom = 16.0
 text = "play"
 script = ExtResource("1_yqorp")
 
 [node name="quit" type="Button" parent="."]
-offset_left = -29.0
-offset_top = 2.0
-offset_right = 29.0
-offset_bottom = 26.0
+offset_left = -30.0
+offset_top = 32.0
+offset_right = 28.0
+offset_bottom = 56.0
 text = "quit"
 script = ExtResource("2_0ykhv")
 
@@ -39,6 +38,9 @@ offset_bottom = -38.0
 theme_override_colors/font_color = Color(0, 0.141176, 0.231373, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.227451)
 text = "deck of exile"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(4, 4)
 
 [connection signal="pressed" from="play" to="play" method="_on_pressed"]
 [connection signal="pressed" from="quit" to="quit" method="_on_pressed"]
