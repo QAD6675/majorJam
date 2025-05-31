@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://d33lh05qo0p8f"]
+
+[node name="mapHandler" type="Node2D"]
+
+[node name="mapNodes" type="Node2D" parent="."]
+
+[node name="nodeLinePath" type="Line2D" parent="."]
+
+[node name="playerIcon" type="AnimatedSprite2D" parent="."]

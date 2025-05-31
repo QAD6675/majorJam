@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://skqwhr3hplge"]
+
+[ext_resource type="PackedScene" uid="uid://bcg4depkfc1vn" path="res://scenes/card.tscn" id="1_0b4qw"]
+
+[node name="cardZone" type="Node2D"]
+
+[node name="hand" type="HBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="card" parent="hand" instance=ExtResource("1_0b4qw")]
+layout_mode = 2
+
+[node name="draw pile" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="discard pile" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="exauhst pile" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_top = -2.0
+offset_right = 40.0
+offset_bottom = 38.0
+
+[node name="FXManager" type="Node2D" parent="."]

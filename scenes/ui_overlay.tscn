@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://dg2ie81inyyw7"]
+
+[node name="UIOverlay" type="CanvasLayer"]
+
+[node name="hud" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HPBar" type="TextureProgressBar" parent="hud"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="value" type="Label" parent="hud/HPBar"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="energyBar" type="TextureProgressBar" parent="hud"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="value" type="Label" parent="hud/energyBar"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="EndTurn" type="Button" parent="hud"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="collectibles" type="VBoxContainer" parent="hud"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

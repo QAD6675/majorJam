@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://bcg4depkfc1vn"]
+
+[node name="card" type="Button"]
