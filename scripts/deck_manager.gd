@@ -1,29 +1,56 @@
 extends Node2D
 
-var full_deck: Array[CardData] = []
-var draw_pile: Array[CardData] = []
-var discard_pile: Array[CardData] = []
-var exhaust_pile: Array[CardData] = []
-var hand: Array[CardData] = []
-var hand_size := 6
-@onready var card_zone: Node2D = %cardZone
+#signals
+signal pilesChanged()
+
+#consts
+const DECK_PATH ="res://data/deck.json"
+const CARDDB_PATH="res://data/cards.json"
+# Deck and piles
+var full_deck: Array = []
+var draw_pile: Array = []
+var discard_pile: Array = []
+var exhaust_pile: Array = []
+var hand: Array = []
+var hand_limit := 6
 
 func _ready():
-	load_full_deck_from_tres("res://data/deck.tres")
+	load_full_deck_from_json()
 	setup_combat_deck()
 
-func load_full_deck_from_tres(path: String) -> void:
-	var deck_resource = load(path)
+# --- JSON Deck Loading ---
+func load_full_deck_from_json() -> void:
+	var deck = FileAccess.open(DECK_PATH, FileAccess.READ)
+	var db = FileAccess.open(CARDDB_PATH, FileAccess.READ)
+	if not deck:
+		push_error("Could not open deck JSON file: %s" % DECK_PATH)
+		return
+	if not db:
+		push_error("Could not open deck JSON file: %s" % CARDDB_PATH)
+		return
+	var parsed_deck = JSON.parse_string(deck.get_as_text())
+	var parsed_db = JSON.parse_string(db.get_as_text())
+	db.close()
+	deck.close()
+	if (typeof(parsed_db) != TYPE_ARRAY)or(typeof(parsed_deck) != TYPE_ARRAY):
+		push_error("Deck or CardDB JSON root is not an array")
+		return
 	full_deck.clear()
-	if deck_resource and deck_resource is Array:
-		for card in deck_resource:
-			if card is CardData:
-				full_deck.append(card.duplicate())
-			else:
-				push_error("Invalid card in deck resource: not CardData")
-	else:
-		push_error("Failed to load deck.tres or resource is not an Array of CardData")
+	for owned_card in parsed_deck:
+		for card_entry in parsed_db:
+			if owned_card != card_entry.id:
+				continue
+			var card = CardData.new()
+			card.id = card_entry.get("id", "")
+			card.name = card_entry.get("name", "")
+			card.description = card_entry.get("description", "")
+			card.energy_cost = card_entry.get("energy_cost", 0)
+			card.type = card_entry.get("type", "")
+			card.target = card_entry.get("target", "")
+			card.effects = card_entry.get("effects", {})
+			full_deck.append(card)
 
+# --- Setup at start of combat/encounter ---
 func setup_combat_deck() -> void:
 	draw_pile.clear()
 	discard_pile.clear()
@@ -36,35 +63,33 @@ func setup_combat_deck() -> void:
 func shuffle_draw_pile() -> void:
 	draw_pile.shuffle()
 
+# --- Card Drawing and Moving Logic ---
 func draw_card() -> CardData:
-	if hand.size() >= hand_size:
+	if hand.size() >= hand_limit:
 		push_warning("Hand limit reached!")
 		return null
-	if len(full_deck)==0:
+	if len(draw_pile)==0:
 		reshuffle_discard_into_draw_pile()
-		if len(full_deck)==0:
+		if len(draw_pile)==0:
+			push_warning("No Cards?")
 			return null
 	var card = draw_pile.pop_front()
 	hand.append(card)
 	return card
 
-func discard_card(card: CardData) -> void:
-	var idx = hand.find(card)
-	if idx != -1:
-		hand.remove_at(idx)
-	discard_pile.append(card)
+func discard_card(cardIndex: int) -> void:
+	if cardIndex >= 0:
+		discard_pile.append(draw_pile[cardIndex].duplicate())
+		hand.remove_at(cardIndex)
 
-func exhaust_card(card: CardData) -> void:
-	var idx = hand.find(card)
-	if idx != -1:
-		hand.remove_at(idx)
-	exhaust_pile.append(card)
+func exhaust_card(cardIndex) -> void:
+	if cardIndex >= 0:
+		exhaust_pile.append(draw_pile[cardIndex].duplicate())
+		hand.remove_at(cardIndex)
 
-func play_card(card: CardData) -> void:
-	var idx = hand.find(card)
-	if idx != -1:
-		hand.remove_at(idx)
-		discard_pile.append(card)
+func play_card(cardIndex: int) -> void:
+#	TODO:play it
+	discard_card(cardIndex)
 
 func reshuffle_discard_into_draw_pile() -> void:
 	draw_pile += discard_pile
@@ -73,92 +98,49 @@ func reshuffle_discard_into_draw_pile() -> void:
 
 func add_card(card: CardData) -> void:
 	full_deck.append(card)
-	draw_pile.append(card.duplicate())
 
-func remove_card_by_id(card_id: String) -> void:
-	for i in range(full_deck.size()):
-		if full_deck[i].id == card_id:
-			full_deck.remove_at(i)
-			break
+func remove_card(cardIndex) -> void:
+	full_deck.remove_at(cardIndex)
 
+# --- Querying piles for UI or logic ---
 func get_full_deck() -> Array:
-	return full_deck.duplicate()
+	return full_deck
 
 func get_draw_pile() -> Array:
-	return draw_pile.duplicate()
+	return draw_pile
 
 func get_discard_pile() -> Array:
-	return discard_pile.duplicate()
+	return discard_pile
 
 func get_exhaust_pile() -> Array:
-	return exhaust_pile.duplicate()
+	return exhaust_pile
 
 func get_hand() -> Array:
-	return hand.duplicate()
+	return hand
 
-# --- Helper: find card in full_deck by id ---
-func find_in_full_deck(card_id: String) -> CardData:
-	for card in full_deck:
-		if card.id == card_id:
-			return card
-	return null
+func get_card(cardIndex) -> CardData:
+	return full_deck[cardIndex]
 
-# --- Serialization for save/load ---
-func serialize() -> Dictionary:
+func serialize() -> Array:
 	var full_deck_ids = []
 	for card in full_deck:
 		full_deck_ids.append(card.id)
-	var draw_pile_ids = []
-	for card in draw_pile:
-		draw_pile_ids.append(card.id)
-	var discard_pile_ids = []
-	for card in discard_pile:
-		discard_pile_ids.append(card.id)
-	var exhaust_pile_ids = []
-	for card in exhaust_pile:
-		exhaust_pile_ids.append(card.id)
-	var hand_ids = []
-	for card in hand:
-		hand_ids.append(card.id)
+	return full_deck_ids
+	
+func _on_game_state_save() -> void:
+	var deck = FileAccess.open(DECK_PATH, FileAccess.WRITE)
+	if not deck:
+		push_error("Could not open deck JSON file: %s" % DECK_PATH)
+		return
+	deck.store_string(JSON.stringify(serialize()))
+	deck.close()
+	return
 
-	return {
-		"full_deck": full_deck_ids,
-		"draw_pile": draw_pile_ids,
-		"discard_pile": discard_pile_ids,
-		"exhaust_pile": exhaust_pile_ids,
-		"hand": hand_ids
-	}
-
-func deserialize(data: Dictionary) -> void:
-	full_deck.clear()
-	draw_pile.clear()
-	discard_pile.clear()
-	exhaust_pile.clear()
-	hand.clear()
-	# Always load full_deck first
-	if data.has("full_deck"):
-		for card_id in data["full_deck"]:
-			var card = find_in_full_deck(card_id)
-			if card:
-				full_deck.append(card.duplicate())
-	# Now all piles can be restored from full_deck
-	if data.has("draw_pile"):
-		for card_id in data["draw_pile"]:
-			var card = find_in_full_deck(card_id)
-			if card:
-				draw_pile.append(card.duplicate())
-	if data.has("discard_pile"):
-		for card_id in data["discard_pile"]:
-			var card = find_in_full_deck(card_id)
-			if card:
-				discard_pile.append(card.duplicate())
-	if data.has("exhaust_pile"):
-		for card_id in data["exhaust_pile"]:
-			var card = find_in_full_deck(card_id)
-			if card:
-				exhaust_pile.append(card.duplicate())
-	if data.has("hand"):
-		for card_id in data["hand"]:
-			var card = find_in_full_deck(card_id)
-			if card:
-				hand.append(card.duplicate())
+func find_in_deck(card_id: String,depth:int=1) -> Array[CardData]:
+	var results :=[]
+	for card in full_deck:
+		if card.id == card_id and len(results)<depth:
+			results.append(card)
+		else:
+			break
+	return results

@@ -7,6 +7,7 @@ signal player_stats_changed(stats)
 signal deck_changed(deck)
 signal collectible_gained(item)
 signal reward_given(reward)
+signal save()
 
 # --- Enums ---
 enum Phase { COMBAT, REWARD, MAP, NON_COMBAT }
@@ -165,6 +166,7 @@ func get_collectibles() -> Array:
 # --- (OPTIONAL) SAVE/LOAD ---
 
 func save_game():
+
 	var save_data = {
 		"loop": current_loop,
 		"node_index": node_index,

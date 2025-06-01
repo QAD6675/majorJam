@@ -5,7 +5,7 @@
 	"description": "Deal 6 damage to a single enemy.",
 	"energy_cost": 1,
 	"type": "attack",
-	"target": "singleEnemy",
+	"target": "enemy",
 	"effects": {
 	  "damage": 6
 	}

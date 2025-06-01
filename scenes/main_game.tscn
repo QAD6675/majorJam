@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://doxr8kyciuljj"]
+[gd_scene load_steps=10 format=3 uid="uid://doxr8kyciuljj"]
 
 [ext_resource type="PackedScene" uid="uid://d33lh05qo0p8f" path="res://scenes/map_handler.tscn" id="1_72e8q"]
 [ext_resource type="PackedScene" uid="uid://2otejer28j4r" path="res://scenes/combat_handler.tscn" id="1_s3esy"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://cw50t0y3dgch7" path="res://scripts/game_state.gd" id="5_ygxny"]
 [ext_resource type="PackedScene" uid="uid://bcg4depkfc1vn" path="res://scenes/card.tscn" id="6_70vka"]
 [ext_resource type="PackedScene" uid="uid://du28yn6whckw" path="res://scenes/fx_manager.tscn" id="6_wi4c7"]
+[ext_resource type="Script" uid="uid://d26a5nyybwfpo" path="res://scripts/deck_manager.gd" id="8_2l77h"]
 
 [node name="mainGame" type="Node2D"]
 
@@ -64,6 +65,7 @@ script = ExtResource("5_ygxny")
 [node name="playerStats" type="ResourcePreloader" parent="gameState"]
 
 [node name="deckManager" type="Node2D" parent="gameState"]
+script = ExtResource("8_2l77h")
 
 [node name="collectiblesManager" type="Node2D" parent="gameState"]
 position = Vector2(0, 2)
@@ -76,3 +78,5 @@ unique_name_in_owner = true
 
 [node name="FXManager" parent="." instance=ExtResource("6_wi4c7")]
 unique_name_in_owner = true
+
+[connection signal="save" from="gameState" to="gameState/deckManager" method="_on_game_state_save"]

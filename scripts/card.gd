@@ -29,4 +29,4 @@ enum CardEffect {
 @export var energy_cost: int
 @export var type: CardType
 @export var target: CardTarget
-@export var effects: Array[Dictionary]
+@export var effects: Dictionary[CardEffect,int]
