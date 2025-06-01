@@ -1,12 +1,10 @@
 extends Node2D
 
+#directs the game flow
+
 # --- Signals ---
 signal phase_changed(new_phase)
-signal node_advanced(node_phase, loop, node_index)
 signal player_stats_changed(stats)
-signal deck_changed(deck)
-signal collectible_gained(item)
-signal reward_given(reward)
 signal save()
 
 # --- Enums ---
@@ -38,7 +36,7 @@ func connect_signals():
 	# Example: connect reward/advance events
 	if combat_handler and combat_handler.has_signal("combat_ended"):
 		combat_handler.connect("combat_ended", Callable(self, "_on_combat_ended"))
-	if rewards_handler and rewards_handler.has_signal("rewardss_claimed"):
+	if rewards_handler and rewards_handler.has_signal("rewards_claimed"):
 		rewards_handler.connect("rewards_claimed", Callable(self, "_on_rewards_claimed"))
 	if map_handler and map_handler.has_signal("mapDone"):
 		map_handler.connect("mapDone", Callable(self, "_on_map_done"))

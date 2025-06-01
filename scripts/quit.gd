@@ -2,7 +2,7 @@ extends Button
 var firstTime :=true
 
 func _on_pressed() -> void:
-	if not firstTime:
+	if firstTime:
 		$"../title".text="come on at least try it"
 		firstTime=false
 	else:

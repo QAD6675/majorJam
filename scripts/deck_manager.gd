@@ -1,18 +1,20 @@
 extends Node2D
 
-#signals
-signal pilesChanged()
+#handles adding/removing cards from the deck save/load and actions(play/draw/discard/exauhst)
+
+signal cardDrawn()
+signal cardDiscarded(cardIndex:int)
 
 #consts
 const DECK_PATH ="res://data/deck.json"
 const CARDDB_PATH="res://data/cards.json"
 # Deck and piles
-var full_deck: Array = []
-var draw_pile: Array = []
-var discard_pile: Array = []
-var exhaust_pile: Array = []
-var hand: Array = []
-var hand_limit := 6
+@export var full_deck: Array = []
+@export var draw_pile: Array = []
+@export var discard_pile: Array = []
+@export var exhaust_pile: Array = []
+@export var hand: Array = []
+@export var hand_limit := 6
 
 func _ready():
 	load_full_deck_from_json()
@@ -64,31 +66,29 @@ func shuffle_draw_pile() -> void:
 	draw_pile.shuffle()
 
 # --- Card Drawing and Moving Logic ---
-func draw_card() -> CardData:
-	if hand.size() >= hand_limit:
-		push_warning("Hand limit reached!")
-		return null
+func drawCard() -> void:
 	if len(draw_pile)==0:
 		reshuffle_discard_into_draw_pile()
 		if len(draw_pile)==0:
 			push_warning("No Cards?")
-			return null
+			return
 	var card = draw_pile.pop_front()
 	hand.append(card)
-	return card
+	emit_signal("cardDrawn")
 
 func discard_card(cardIndex: int) -> void:
 	if cardIndex >= 0:
 		discard_pile.append(draw_pile[cardIndex].duplicate())
 		hand.remove_at(cardIndex)
+		emit_signal("cardDiscarded",cardIndex)
 
-func exhaust_card(cardIndex) -> void:
+func _on_card_zone_exauhst_card(cardIndex: int) -> void:
 	if cardIndex >= 0:
 		exhaust_pile.append(draw_pile[cardIndex].duplicate())
 		hand.remove_at(cardIndex)
 
-func play_card(cardIndex: int) -> void:
-#	TODO:play it
+func _on_card_zone_play_card_from_hand(cardIndex: int) -> void:
+#	TODO play it fr
 	discard_card(cardIndex)
 
 func reshuffle_discard_into_draw_pile() -> void:
@@ -96,30 +96,11 @@ func reshuffle_discard_into_draw_pile() -> void:
 	discard_pile.clear()
 	shuffle_draw_pile()
 
-func add_card(card: CardData) -> void:
+func _on_add_card(card: CardData) -> void:
 	full_deck.append(card)
 
 func remove_card(cardIndex) -> void:
 	full_deck.remove_at(cardIndex)
-
-# --- Querying piles for UI or logic ---
-func get_full_deck() -> Array:
-	return full_deck
-
-func get_draw_pile() -> Array:
-	return draw_pile
-
-func get_discard_pile() -> Array:
-	return discard_pile
-
-func get_exhaust_pile() -> Array:
-	return exhaust_pile
-
-func get_hand() -> Array:
-	return hand
-
-func get_card(cardIndex) -> CardData:
-	return full_deck[cardIndex]
 
 func serialize() -> Array:
 	var full_deck_ids = []
@@ -144,3 +125,11 @@ func find_in_deck(card_id: String,depth:int=1) -> Array[CardData]:
 		else:
 			break
 	return results
+
+func _on_combat_handler_turn_changed(Turn: Variant) -> void:
+	if Turn==%combatHandler.Turn.player:
+		for i in hand_limit:
+			drawCard()
+	else:
+		for i in len(hand):
+			discard_card(i)

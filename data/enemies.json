@@ -1,0 +1,158 @@
+{
+  "enemies": [
+	{
+	  "id": "GruntBandit",
+	  "name": "Grunt Bandit",
+	  "max_hp": 30,
+	  "intent_cycle": [
+		{ "type": "attack", "value": 6 },
+		{ "type": "block", "value": 5 },
+		{ "type": "attack", "value": 8 }
+	  ]
+	},
+	{
+	  "id": "WraithOfDoubt",
+	  "name": "Wraith of Doubt",
+	  "max_hp": 28,
+	  "intent_cycle": [
+		{ "type": "inflict", "status": "weak", "value": 2 },
+		{ "type": "attack", "value": 7 },
+		{ "type": "block", "value": 4 }
+	  ]
+	},
+	{
+	  "id": "RulebreakerScout",
+	  "name": "Rulebreaker Scout",
+	  "max_hp": 35,
+	  "intent_cycle": [
+		{ "type": "attack", "value": 5 },
+		{ "type": "attack", "value": 5 },
+		{ "type": "inflict", "status": "vulnerable", "value": 2 }
+	  ]
+	},
+	{
+	  "id": "ToxicHermit",
+	  "name": "Toxic Hermit",
+	  "max_hp": 36,
+	  "intent_cycle": [
+		{ "type": "inflict", "status": "poison", "value": 3 },
+		{ "type": "block", "value": 6 },
+		{ "type": "attack", "value": 4 }
+	  ]
+	},
+	{
+	  "id": "CarrionWeaver",
+	  "name": "Carrion Weaver",
+	  "max_hp": 25,
+	  "intent_cycle": [
+		{ "type": "attack", "value": 4 },
+		{ "type": "attack", "value": 4 },
+		{ "type": "inflict", "status": "weak", "value": 1 }
+	  ]
+	},
+	{
+	  "id": "ArcaneSentinel",
+	  "name": "Arcane Sentinel",
+	  "max_hp": 33,
+	  "intent_cycle": [
+		{ "type": "attack", "value": 5, "status": { "status": "mana_leak", "value": 1 } },
+		{ "type": "block", "value": 5 },
+		{ "type": "attack", "value": 6 }
+	  ]
+	},
+	{
+	  "id": "NullAssassin",
+	  "name": "Null Assassin",
+	  "max_hp": 40,
+	  "intent_cycle": [
+		{ "type": "attack", "value": 10 },
+		{ "type": "inflict", "status": "vulnerable", "value": 2 },
+		{ "type": "block", "value": 8 }
+	  ]
+	},
+	{
+	  "id": "BoneShaper",
+	  "name": "Bone Shaper",
+	  "max_hp": 30,
+	  "intent_cycle": [
+		{ "type": "block", "value": 2 },
+		{ "type": "attack", "value": 8, "scope": "aoe" },
+		{ "type": "block", "value": 3 }
+	  ]
+	},
+	{
+	  "id": "WanderingMercenary",
+	  "name": "Wandering Mercenary",
+	  "max_hp": 40,
+	  "intent_cycle": [
+		{ "type": "attack", "value": 6, "times": 2 },
+		{ "type": "heal", "value": 5 },
+		{ "type": "attack", "value": 6, "times": 2 }
+	  ]
+	},
+	{
+	  "id": "SteelSpinedKnight",
+	  "name": "Steel-Spined Knight",
+	  "max_hp": 50,
+	  "intent_cycle": [
+		{ "type": "block", "value": 15 },
+		{ "type": "attack", "value": 9 },
+		{ "type": "block", "value": 10 }
+	  ]
+	},
+	{
+	  "id": "RitualAcolyte",
+	  "name": "Ritual Acolyte",
+	  "max_hp": 45,
+	  "intent_cycle": [
+		{ "type": "inflict", "status": "hex", "value": 1 },
+		{ "type": "attack", "value": 8, "scope": "self_explode" },
+		{ "type": "inflict", "status": "hex", "value": 1 }
+	  ]
+	},
+	{
+	  "id": "ChronoWarden",
+	  "name": "Chrono Warden",
+	  "max_hp": 70,
+	  "intent_cycle": [
+		{ "type": "attack", "value": 10 },
+		{ "type": "state_change", "subtype": "rewind" },
+		{ "type": "attack", "value": 10 },
+		{ "type": "inflict", "status": "skip_draw", "value": 1 }
+	  ]
+	},
+	{
+	  "id": "OmenOfConsumption",
+	  "name": "Omen of Consumption",
+	  "max_hp": 80,
+	  "intent_cycle": [
+		{ "type": "attack", "value": 12 },
+		{ "type": "inflict", "status": "poison", "value": 5 },
+		{ "type": "attack", "value": 6 },
+		{ "type": "block", "value": 10 }
+	  ]
+	},
+	{
+	  "id": "EyeOfSuppression",
+	  "name": "Eye of Suppression",
+	  "max_hp": 90,
+	  "intent_cycle": [
+		{ "type": "inflict", "status": "weak", "value": 3 },
+		{ "type": "attack", "value": 8 },
+		{ "type": "inflict", "status": "vulnerable", "value": 3 },
+		{ "type": "block", "value": 8 }
+	  ]
+	},
+	{
+	  "id": "JudgeOfSheol",
+	  "name": "Judge of Sheol",
+	  "max_hp": 100,
+	  "intent_cycle": [
+		{ "type": "attack", "value": 14 },
+		{ "type": "block", "value": 12 },
+		{ "type": "inflict", "status": "weak", "value": 2 },
+		{ "type": "attack", "value": 10 }
+	  ]
+	}
+  ]
+}

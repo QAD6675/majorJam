@@ -1,34 +1,52 @@
-[gd_scene load_steps=10 format=3 uid="uid://doxr8kyciuljj"]
+[gd_scene load_steps=12 format=3 uid="uid://doxr8kyciuljj"]
 
 [ext_resource type="PackedScene" uid="uid://d33lh05qo0p8f" path="res://scenes/map_handler.tscn" id="1_72e8q"]
 [ext_resource type="PackedScene" uid="uid://2otejer28j4r" path="res://scenes/combat_handler.tscn" id="1_s3esy"]
+[ext_resource type="Script" uid="uid://cohhscsonyjje" path="res://scripts/map_handler.gd" id="2_nqdth"]
 [ext_resource type="PackedScene" uid="uid://bquantxe37elp" path="res://scenes/non_combat_handler.tscn" id="3_0rdsr"]
-[ext_resource type="PackedScene" uid="uid://4m0m1rop4fbe" path="res://scenes/rewards_handler.tscn" id="4_70vka"]
 [ext_resource type="PackedScene" uid="uid://dg2ie81inyyw7" path="res://scenes/ui_overlay.tscn" id="4_ipu61"]
+[ext_resource type="Script" uid="uid://bv4y071qn3moy" path="res://scripts/rewards_handler.gd" id="5_5cypo"]
+[ext_resource type="Script" uid="uid://cvkwt21qusglf" path="res://scripts/non_combat_handler.gd" id="5_o6v7o"]
 [ext_resource type="Script" uid="uid://cw50t0y3dgch7" path="res://scripts/game_state.gd" id="5_ygxny"]
 [ext_resource type="PackedScene" uid="uid://bcg4depkfc1vn" path="res://scenes/card.tscn" id="6_70vka"]
-[ext_resource type="PackedScene" uid="uid://du28yn6whckw" path="res://scenes/fx_manager.tscn" id="6_wi4c7"]
+[ext_resource type="Script" uid="uid://ca63h4j23ylxt" path="res://scripts/card_zone.gd" id="6_nqdth"]
 [ext_resource type="Script" uid="uid://d26a5nyybwfpo" path="res://scripts/deck_manager.gd" id="8_2l77h"]
 
 [node name="mainGame" type="Node2D"]
 
 [node name="mapHandler" parent="." instance=ExtResource("1_72e8q")]
 unique_name_in_owner = true
+script = ExtResource("2_nqdth")
 
 [node name="combatHandler" parent="." instance=ExtResource("1_s3esy")]
 unique_name_in_owner = true
 
 [node name="nonCombatHandler" parent="." instance=ExtResource("3_0rdsr")]
 unique_name_in_owner = true
+script = ExtResource("5_o6v7o")
 
-[node name="RewardsHandler" parent="." instance=ExtResource("4_70vka")]
+[node name="RewardsHandler" type="Node2D" parent="."]
 unique_name_in_owner = true
+script = ExtResource("5_5cypo")
+
+[node name="gameState" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("5_ygxny")
+
+[node name="playerStats" type="ResourcePreloader" parent="gameState"]
+
+[node name="deckManager" type="Node2D" parent="gameState"]
+script = ExtResource("8_2l77h")
+
+[node name="collectiblesManager" type="Node2D" parent="gameState"]
+position = Vector2(0, 2)
 
 [node name="UIOverlay" parent="." instance=ExtResource("4_ipu61")]
 unique_name_in_owner = true
 
-[node name="cardZone" type="Node2D" parent="."]
+[node name="cardZone" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
+script = ExtResource("6_nqdth")
 
 [node name="hand" type="HBoxContainer" parent="cardZone"]
 offset_right = 40.0
@@ -58,17 +76,9 @@ offset_bottom = 38.0
 
 [node name="FXManager" type="Node2D" parent="cardZone"]
 
-[node name="gameState" type="Node2D" parent="."]
-unique_name_in_owner = true
-script = ExtResource("5_ygxny")
-
-[node name="playerStats" type="ResourcePreloader" parent="gameState"]
-
-[node name="deckManager" type="Node2D" parent="gameState"]
-script = ExtResource("8_2l77h")
-
-[node name="collectiblesManager" type="Node2D" parent="gameState"]
-position = Vector2(0, 2)
+[node name="EndTurn" type="Button" parent="cardZone"]
+offset_right = 8.0
+offset_bottom = 8.0
 
 [node name="audioManager" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
@@ -76,7 +86,15 @@ unique_name_in_owner = true
 [node name="transitionHandler" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 
-[node name="FXManager" parent="." instance=ExtResource("6_wi4c7")]
+[node name="FXManager" type="Node2D" parent="."]
 unique_name_in_owner = true
 
+[connection signal="turnChanged" from="combatHandler" to="gameState/deckManager" method="_on_combat_handler_turn_changed"]
+[connection signal="addCard" from="RewardsHandler" to="gameState/deckManager" method="_on_add_card"]
+[connection signal="phase_changed" from="gameState" to="combatHandler" method="_on_game_state_phase_changed"]
 [connection signal="save" from="gameState" to="gameState/deckManager" method="_on_game_state_save"]
+[connection signal="cardDiscarded" from="gameState/deckManager" to="cardZone" method="_on_deck_manager_card_discarded"]
+[connection signal="cardDrawn" from="gameState/deckManager" to="cardZone" method="_on_deck_manager_card_drawn"]
+[connection signal="exauhstCard" from="cardZone" to="gameState/deckManager" method="_on_card_zone_exauhst_card"]
+[connection signal="playCardFromHand" from="cardZone" to="gameState/deckManager" method="_on_card_zone_play_card_from_hand"]
+[connection signal="pressed" from="cardZone/EndTurn" to="combatHandler" method="_on_end_turn_pressed"]

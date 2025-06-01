@@ -1,0 +1,49 @@
+[
+  {
+	"biome": "Outskirts",
+	"nodes": [
+	  { "type": "combat", "enemies": ["GruntBandit", "WraithOfDoubt", "GruntBandit"] },
+	  { "type": "combat", "enemies": ["WraithOfDoubt", "GruntBandit", "WraithOfDoubt"] },
+	  { "type": "combat", "enemies": ["RulebreakerScout", "GruntBandit", "WraithOfDoubt"] },
+	  { "type": "event" }
+	]
+  },
+  {
+	"biome": "Wastes",
+	"nodes": [
+	  { "type": "combat", "enemies": ["ToxicHermit", "CarrionWeaver", "ArcaneSentinel"] },
+	  { "type": "combat", "enemies": ["CarrionWeaver", "ToxicHermit", "CarrionWeaver"] },
+	  { "type": "combat", "enemies": ["WraithOfDoubt", "ArcaneSentinel", "RulebreakerScout"] },
+	  { "type": "event" }
+	]
+  },
+  {
+	"biome": "Ruins",
+	"nodes": [
+	  { "type": "combat", "enemies": ["NullAssassin", "ToxicHermit", "BoneShaper"] },
+	  { "type": "combat", "enemies": ["BoneShaper", "WanderingMercenary", "CarrionWeaver"] },
+	  { "type": "combat", "enemies": ["NullAssassin", "BoneShaper", "WraithOfDoubt"] },
+	  { "type": "event" }
+	]
+  },
+  {
+	"biome": "CitadelOutskirts",
+	"nodes": [
+	  { "type": "combat", "enemies": ["SteelSpinedKnight", "RitualAcolyte", "WanderingMercenary"] },
+	  { "type": "combat", "enemies": ["RitualAcolyte", "SteelSpinedKnight", "BoneShaper"] },
+	  { "type": "combat", "enemies": ["ChronoWarden", "SteelSpinedKnight", "RitualAcolyte"] },
+	  { "type": "event" }
+	]
+  },
+  {
+	"biome": "Citadel",
+	"nodes": [
+	  { "type": "event" },
+	  { "type": "boss", "enemies": ["OmenOfConsumption"] },
+	  { "type": "event" },
+	  { "type": "boss", "enemies": ["EyeOfSuppression"] },
+	  { "type": "event" },
+	  { "type": "boss", "enemies": ["JudgeOfSheol"] }
+	]
+  }
+]
