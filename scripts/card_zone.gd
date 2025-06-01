@@ -16,3 +16,5 @@ func shuffle():
 
 func error():#when cant play card
 	pass
+func choose_exauhst():
+	pass

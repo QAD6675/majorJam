@@ -86,6 +86,8 @@ func discard_card(cardIndex: int) -> void:
 		emit_signal("cardDiscarded",cardIndex)
 
 func _on_card_zone_exauhst_card(cardIndex: int) -> void:
+	exauhst_card(cardIndex)
+func exauhst_card(cardIndex:int):
 	if cardIndex >= 0:
 		exhaust_pile.append(draw_pile[cardIndex].duplicate())
 		hand.remove_at(cardIndex)

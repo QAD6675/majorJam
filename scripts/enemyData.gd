@@ -8,6 +8,8 @@ class_name EnemyData
 @export var intents: Array[Dictionary] = [] # Intent,value
 @export var intent_index: int = 0
 @export var status_effects: Dictionary = {}
+@export var dmg_buff :=0
+@export var poison :=0
 
 enum Intent {attack,block,inflict,heal,buff}
 

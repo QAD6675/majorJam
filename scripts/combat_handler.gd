@@ -29,17 +29,49 @@ func start_combat(enemy_datas: Array = []):
 	emit_signal("turn_changed", current_turn)
 	# Optionally, update UI/enemy sprites here
 
-func _on_deck_manager_try_play_card(card:CardData,target_index:int):
+func _on_deck_manager_try_play_card(card:CardData,target_index:int=0):
 	if card.energy_cost>energy:
 		emit_signal("card_play_failed")
 		return
 	energy-=card.energy_cost
 	if target_index >= 0 and target_index < enemies.size():
-		var target = enemies[target_index]
-		for effect in card.effects:
-			match effect:
-				CardData.CardEffect.damage:
-					target.take_damage(card.effects.get(effect))
+		match card.CardTarget:
+			CardData.CardTarget.enemy:
+				var target = enemies[target_index]
+				for effect in card.effects:
+					match effect:
+						CardData.CardEffect.damage:
+							target.take_damage(card.effects.get(effect))
+						CardData.CardEffect.poison:
+							target.poison+=card.effects.get(effect)
+						CardData.CardEffect.weaken:
+							target.dmg_buff-=card.effects.get(effect)
+			CardData.CardTarget.aoe:
+				for effect in card.effects:
+					match effect:
+						CardData.CardEffect.damage:
+							for target in enemies:
+								target.take_damage(card.effects.get(effect))
+						CardData.CardEffect.poison:
+							for target in enemies:
+								target.poison+=card.effects.get(effect)
+						CardData.CardEffect.weaken:
+							for target in enemies:
+								target.dmg_buff-=card.effects.get(effect)
+			CardData.CardTarget.player:
+				for effect in card.effects:
+					match effect:
+						CardData.CardEffect.block:
+							%"gameState/playerStats".block+=card.effects.get(effect)
+						CardData.CardEffect.buff_def:
+							%gameState/playerStats.def_buff+=card.effects.get(effect)
+						CardData.CardEffect.buff_dmg:
+							%gameState/playerStats.dmg_buff+=card.effects.get(effect)
+						CardData.CardEffect.draw:
+							for i in card.effects.get(effect):
+								%gameState/deckManager.draw()
+						CardData.CardEffect.exauhst:
+							%cardZone.exauhstCard()
 	emit_signal("card_play_success")
 	if enemies.size() == 0:
 		emit_signal("combat_ended", true)

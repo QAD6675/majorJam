@@ -121,7 +121,7 @@ func collect_rewards(rewards):
 	emit_signal("rewards_given", rewards)
 
 func game_over():
-	# TODO:Implement game over logic here (show screen, save stats, etc.)
+	#%UIOverlay.do smt		#TODO:Implement game over logic here (show screen, save stats, etc.)
 	pass
 
 # --- LOOP MANAGEMENT ---
