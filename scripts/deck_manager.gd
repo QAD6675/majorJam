@@ -2,9 +2,9 @@ extends Node2D
 
 #handles adding/removing cards from the deck save/load and actions(play/draw/discard/exauhst)
 
-signal cardDrawn()
-signal cardDiscarded(cardIndex:int)
 signal tryPlayCard(card,target)
+
+var cardBeingPlayed :=0
 
 #consts
 const DECK_PATH ="res://data/deck.json"
@@ -75,12 +75,14 @@ func drawCard() -> void:
 			return
 	var card = draw_pile.pop_front()
 	hand.append(card)
+	%cardZone.draw(card)
 	emit_signal("cardDrawn")
 
 func discard_card(cardIndex: int) -> void:
 	if cardIndex >= 0:
 		discard_pile.append(draw_pile[cardIndex].duplicate())
 		hand.remove_at(cardIndex)
+		%cardZone.discard(cardIndex)
 		emit_signal("cardDiscarded",cardIndex)
 
 func _on_card_zone_exauhst_card(cardIndex: int) -> void:
@@ -89,6 +91,7 @@ func _on_card_zone_exauhst_card(cardIndex: int) -> void:
 		hand.remove_at(cardIndex)
 
 func _on_card_zone_play_card_from_hand(cardIndex: int,target:int) -> void:
+	cardBeingPlayed=cardIndex
 	emit_signal("tryPlayCard",hand[cardIndex],target)
 
 func reshuffle_discard_into_draw_pile() -> void:
@@ -136,8 +139,8 @@ func _on_combat_handler_turn_changed(Turn: Variant) -> void:
 
 
 func _on_combat_handler_card_play_failed() -> void:
-	pass # Replace with function body.
-
+	%cardZone.error()
 
 func _on_combat_handler_card_play_success() -> void:
-	pass # Replace with function body.
+	%cardZone.discard(cardBeingPlayed)
+	discard_card(cardBeingPlayed)

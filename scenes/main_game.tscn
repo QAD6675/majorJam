@@ -102,8 +102,6 @@ unique_name_in_owner = true
 [connection signal="save" from="gameState" to="gameState/playerStats" method="_on_game_state_save"]
 [connection signal="save" from="gameState" to="gameState/deckManager" method="_on_game_state_save"]
 [connection signal="save" from="gameState" to="gameState/collectiblesManager" method="_on_game_state_save"]
-[connection signal="cardDiscarded" from="gameState/deckManager" to="cardZone" method="_on_deck_manager_card_discarded"]
-[connection signal="cardDrawn" from="gameState/deckManager" to="cardZone" method="_on_deck_manager_card_drawn"]
 [connection signal="tryPlayCard" from="gameState/deckManager" to="combatHandler" method="_on_deck_manager_try_play_card"]
 [connection signal="exauhstCard" from="cardZone" to="gameState/deckManager" method="_on_card_zone_exauhst_card"]
 [connection signal="playCardFromHand" from="cardZone" to="gameState/deckManager" method="_on_card_zone_play_card_from_hand"]

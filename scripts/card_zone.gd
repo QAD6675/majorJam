@@ -5,10 +5,14 @@ extends Node2D
 signal playCardFromHand(cardIndex:int,target:int)#TODO add target here and connect to combat
 signal exauhstCard(cardIndex:int)
 
+func discard(Index:int):
+	pass
 
-func _on_deck_manager_card_drawn() -> void:
-	pass # TODO animation
+func draw(card:CardData):
+	pass
 
+func shuffle():
+	pass
 
-func _on_deck_manager_card_discarded(cardIndex: int) -> void:
-	pass # TODO animation
+func error():#when cant play card
+	pass

@@ -3,7 +3,7 @@ extends Node2D
 signal combat_ended(victory: bool)
 signal turn_changed(turn: int) # 0=player, 1=enemies
 signal card_play_failed()
-signal card_play_success()
+signal card_play_success(index:int)
 
 enum Turn { PLAYER, ENEMIES }
 
