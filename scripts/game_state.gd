@@ -26,7 +26,6 @@ var node_index: int = 0
 @onready var non_combat_handler: Node2D = %nonCombatHandler
 @onready var rewards_handler: Node2D = %RewardsHandler
 
-
 func _ready():
 	connect_signals()
 	start_game()

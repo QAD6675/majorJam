@@ -10,7 +10,7 @@ enum Stat {max_hp,current_hp,gold}
 					}
 
 func _ready() -> void:
-	pass #TODO load
+	
 
 func set_stats(new_stats: Dictionary[Stat,int]):
 	stats=new_stats.duplicate()

@@ -37,6 +37,7 @@ script = ExtResource("5_ygxny")
 
 [node name="playerStats" type="ResourcePreloader" parent="gameState"]
 script = ExtResource("8_wjob3")
+stats = null
 
 [node name="deckManager" type="Node2D" parent="gameState"]
 script = ExtResource("8_2l77h")
