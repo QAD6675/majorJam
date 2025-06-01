@@ -4,6 +4,7 @@ extends Node2D
 
 signal cardDrawn()
 signal cardDiscarded(cardIndex:int)
+signal tryPlayCard(card,target)
 
 #consts
 const DECK_PATH ="res://data/deck.json"
@@ -14,7 +15,7 @@ const CARDDB_PATH="res://data/cards.json"
 @export var discard_pile: Array = []
 @export var exhaust_pile: Array = []
 @export var hand: Array = []
-@export var hand_limit := 6
+@export var hand_limit := 4
 
 func _ready():
 	load_full_deck_from_json()
@@ -87,9 +88,8 @@ func _on_card_zone_exauhst_card(cardIndex: int) -> void:
 		exhaust_pile.append(draw_pile[cardIndex].duplicate())
 		hand.remove_at(cardIndex)
 
-func _on_card_zone_play_card_from_hand(cardIndex: int) -> void:
-#	TODO play it fr
-	discard_card(cardIndex)
+func _on_card_zone_play_card_from_hand(cardIndex: int,target:int) -> void:
+	emit_signal("tryPlayCard",hand[cardIndex],target)
 
 func reshuffle_discard_into_draw_pile() -> void:
 	draw_pile += discard_pile
@@ -133,3 +133,11 @@ func _on_combat_handler_turn_changed(Turn: Variant) -> void:
 	else:
 		for i in len(hand):
 			discard_card(i)
+
+
+func _on_combat_handler_card_play_failed() -> void:
+	pass # Replace with function body.
+
+
+func _on_combat_handler_card_play_success() -> void:
+	pass # Replace with function body.

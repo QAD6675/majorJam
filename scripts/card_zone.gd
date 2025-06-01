@@ -2,7 +2,7 @@ extends Node2D
 #handles cards ui
 #ONLY
 
-signal playCardFromHand(cardIndex:int)#TODO add target here and connect to combat
+signal playCardFromHand(cardIndex:int,target:int)#TODO add target here and connect to combat
 signal exauhstCard(cardIndex:int)
 
 

@@ -1,23 +1,84 @@
 extends Node2D
 
-#handles the combat phase
+signal combat_ended(victory: bool)
+signal turn_changed(turn: int) # 0=player, 1=enemies
+signal card_play_failed()
+signal card_play_success()
 
-enum Turn {player,enemy}
+enum Turn { PLAYER, ENEMIES }
 
-var currentTurn:Turn
+@export var energy:int =3
+@export var enemies: Array[Resource] = []
+@export var enemy_data_pool: Array[Resource] = [] # Set this up with EnemyData resources in the editor
 
-signal turnChanged(Turn)
-signal combat_ended()
+var current_turn : Turn = Turn.PLAYER
+
+func start_combat(enemy_datas: Array = []):
+	# Clear any existing enemies
+	enemies.clear()
+	# Use provided enemy datas or sample from pool
+	if enemy_datas.is_empty():
+		# For demo: select 1-3 random enemies
+		var count = randi_range(1, 3)
+		for i in count:
+			enemies.append(enemy_data_pool[randi() % enemy_data_pool.size()].duplicate())
+	else:
+		for data in enemy_datas:
+			enemies.append(data.duplicate())
+	current_turn = Turn.PLAYER
+	emit_signal("turn_changed", current_turn)
+	# Optionally, update UI/enemy sprites here
+
+func _on_deck_manager_try_play_card(card:CardData,target_index:int):
+	if card.energy_cost>energy:
+		emit_signal("card_play_failed")
+		return
+	energy-=card.energy_cost
+	if target_index >= 0 and target_index < enemies.size():
+		var target = enemies[target_index]
+		for effect in card.effects:
+			match effect:
+				CardData.CardEffect.damage:
+					target.take_damage(card.effects.get(effect))
+	emit_signal("card_play_success")
+	if enemies.size() == 0:
+		emit_signal("combat_ended", true)
+
+func next_turn():
+	if current_turn == Turn.PLAYER:
+		current_turn = Turn.ENEMIES
+		emit_signal("turn_changed", current_turn)
+		process_enemy_turns()
+	else:
+		current_turn = Turn.PLAYER
+		emit_signal("turn_changed", current_turn)
+		# Start player turn (draw cards, reset energy, etc.)
+
+func process_enemy_turns():
+	for i in enemies.size():
+		var enemy = enemies[i]
+		var intent = enemy.get_next_intent()
+		match intent.get("type", ""):
+			"attack":
+				# Assume you have a reference to the player!
+				get_node("/root/GameState/player_stats").take_damage(intent.get("value", 0))
+			"block":
+				enemy.status_effects["block"] = intent.get("value", 0)
+			# Add more intent types as needed
+	# End of enemy turn
+	if player_is_dead():
+		emit_signal("combat_ended", false, [])
+	else:
+		next_turn()
+
+func player_is_dead() -> bool:
+	var player_stats = get_node("/root/GameState/player_stats")
+	return player_stats.stats[player_stats.Stat.current_hp] <= 0
 
 func _on_game_state_phase_changed(new_phase: Variant) -> void:
 	if new_phase==%gameState.Phase.COMBAT:
-		currentTurn=Turn.player
-		emit_signal("turnChanged",currentTurn)
-
+		start_combat()
 
 func _on_end_turn_pressed() -> void:
-	currentTurn=Turn.enemy
-	emit_signal("turnChanged",currentTurn)
-
-func start_combat():
-	pass
+	current_turn=Turn.ENEMIES
+	emit_signal("turnChanged",current_turn)

@@ -1,11 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://2otejer28j4r"]
+[gd_scene load_steps=2 format=3 uid="uid://2otejer28j4r"]
 
 [ext_resource type="Script" uid="uid://dvvcog7o1hdd2" path="res://scripts/combat_handler.gd" id="1_kyhno"]
-[ext_resource type="PackedScene" uid="uid://b15u0crnue0dr" path="res://scenes/player.tscn" id="1_nkywk"]
 
 [node name="combatHandler" type="Node2D"]
 script = ExtResource("1_kyhno")
+enemies = null
+enemy_data_pool = null
 
-[node name="Player" parent="." instance=ExtResource("1_nkywk")]
+[node name="Player" type="CharacterBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player"]
+
+[node name="indicators" type="Node2D" parent="Player"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Player/indicators"]
 
 [node name="enemies" type="Node2D" parent="."]

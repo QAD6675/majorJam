@@ -22,6 +22,8 @@ script = ExtResource("2_nqdth")
 
 [node name="combatHandler" parent="." instance=ExtResource("1_s3esy")]
 unique_name_in_owner = true
+enemies = Array[Resource]([])
+enemy_data_pool = Array[Resource]([])
 
 [node name="nonCombatHandler" parent="." instance=ExtResource("3_0rdsr")]
 unique_name_in_owner = true
@@ -93,7 +95,8 @@ unique_name_in_owner = true
 [node name="FXManager" type="Node2D" parent="."]
 unique_name_in_owner = true
 
-[connection signal="turnChanged" from="combatHandler" to="gameState/deckManager" method="_on_combat_handler_turn_changed"]
+[connection signal="card_play_failed" from="combatHandler" to="gameState/deckManager" method="_on_combat_handler_card_play_failed"]
+[connection signal="card_play_success" from="combatHandler" to="gameState/deckManager" method="_on_combat_handler_card_play_success"]
 [connection signal="addCard" from="RewardsHandler" to="gameState/deckManager" method="_on_add_card"]
 [connection signal="phase_changed" from="gameState" to="combatHandler" method="_on_game_state_phase_changed"]
 [connection signal="save" from="gameState" to="gameState/playerStats" method="_on_game_state_save"]
@@ -101,6 +104,7 @@ unique_name_in_owner = true
 [connection signal="save" from="gameState" to="gameState/collectiblesManager" method="_on_game_state_save"]
 [connection signal="cardDiscarded" from="gameState/deckManager" to="cardZone" method="_on_deck_manager_card_discarded"]
 [connection signal="cardDrawn" from="gameState/deckManager" to="cardZone" method="_on_deck_manager_card_drawn"]
+[connection signal="tryPlayCard" from="gameState/deckManager" to="combatHandler" method="_on_deck_manager_try_play_card"]
 [connection signal="exauhstCard" from="cardZone" to="gameState/deckManager" method="_on_card_zone_exauhst_card"]
 [connection signal="playCardFromHand" from="cardZone" to="gameState/deckManager" method="_on_card_zone_play_card_from_hand"]
 [connection signal="pressed" from="cardZone/EndTurn" to="combatHandler" method="_on_end_turn_pressed"]
