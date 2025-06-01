@@ -4,7 +4,6 @@ extends Node2D
 
 # --- Signals ---
 signal phase_changed(new_phase)
-signal player_stats_changed(stats)
 signal save()
 
 # --- Enums ---
@@ -44,7 +43,6 @@ func connect_signals():
 		non_combat_handler.connect("event_ended", Callable(self, "_on_event_ended"))
 
 func start_game():
-	phase = Phase.COMBAT
 	node_index = 0
 	current_loop = 1
 	enter_combat_phase()
