@@ -1,8 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://doxr8kyciuljj"]
+[gd_scene load_steps=13 format=3 uid="uid://doxr8kyciuljj"]
 
 [ext_resource type="PackedScene" uid="uid://d33lh05qo0p8f" path="res://scenes/map_handler.tscn" id="1_72e8q"]
 [ext_resource type="PackedScene" uid="uid://2otejer28j4r" path="res://scenes/combat_handler.tscn" id="1_s3esy"]
-[ext_resource type="Script" uid="uid://cohhscsonyjje" path="res://scripts/map_handler.gd" id="2_nqdth"]
 [ext_resource type="PackedScene" uid="uid://bquantxe37elp" path="res://scenes/non_combat_handler.tscn" id="3_0rdsr"]
 [ext_resource type="PackedScene" uid="uid://dg2ie81inyyw7" path="res://scenes/ui_overlay.tscn" id="4_ipu61"]
 [ext_resource type="Script" uid="uid://bv4y071qn3moy" path="res://scripts/rewards_handler.gd" id="5_5cypo"]
@@ -18,12 +17,10 @@
 
 [node name="mapHandler" parent="." instance=ExtResource("1_72e8q")]
 unique_name_in_owner = true
-script = ExtResource("2_nqdth")
 
 [node name="combatHandler" parent="." instance=ExtResource("1_s3esy")]
 unique_name_in_owner = true
 enemies = Array[Resource]([])
-enemy_data_pool = Array[Resource]([])
 
 [node name="nonCombatHandler" parent="." instance=ExtResource("3_0rdsr")]
 unique_name_in_owner = true

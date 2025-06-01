@@ -9,7 +9,6 @@ enum Turn { PLAYER, ENEMIES }
 
 @export var energy:int =3
 @export var enemies: Array[Resource] = []
-@export var enemy_data_pool: Array[Resource] = [] # Set this up with EnemyData resources in the editor
 
 var current_turn : Turn = Turn.PLAYER
 
@@ -18,10 +17,8 @@ func start_combat(enemy_datas: Array = []):
 	enemies.clear()
 	# Use provided enemy datas or sample from pool
 	if enemy_datas.is_empty():
-		# For demo: select 1-3 random enemies
-		var count = randi_range(1, 3)
-		for i in count:
-			enemies.append(enemy_data_pool[randi() % enemy_data_pool.size()].duplicate())
+		push_error("no enemies")
+		return
 	else:
 		for data in enemy_datas:
 			enemies.append(data.duplicate())
