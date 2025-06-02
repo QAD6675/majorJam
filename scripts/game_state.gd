@@ -2,8 +2,6 @@ extends Node2D
 class_name game_state
 #directs the game flow
 
-# --- Signals ---
-signal phase_changed(new_phase)
 signal save()
 
 # --- Enums ---
@@ -12,7 +10,7 @@ enum Rewards {GOLD,CARD,COLLECTIBLE,HP}
 var phase := Phase.COMBAT
 
 # --- State ---
-var current_loop: int = 1
+var currentBiome: int = 1
 var node_index: int = 0
 
 # --- Children Managers (set up as children in the scene, NOT dynamically instanced) ---
@@ -43,7 +41,16 @@ func connect_signals():
 
 func start_game():
 	node_index = 0
-	current_loop = 1
+	currentBiome = 1
+	var file = FileAccess.open("res://data/state", FileAccess.READ)
+	if file:
+		var parsed = JSON.parse_string(file.get_as_text())
+		file.close()
+		if typeof(parsed) != TYPE_DICTIONARY:
+			push_error("json state is corrupted")
+			return
+		node_index=parsed.get("node")
+		currentBiome=parsed.get("biome")
 	enter_combat_phase()
 
 # --- PHASE MANAGEMENT ---
@@ -67,7 +74,7 @@ func enter_map_phase():
 	emit_signal("phase_changed", phase)
 	_show_handler(map_handler)
 	if map_handler.has_method("display_map"):
-		map_handler.display_map(current_loop, node_index)
+		map_handler.display_map(currentBiome, node_index)
 
 func enter_non_combat_phase(event_type = null):
 	phase = Phase.NON_COMBAT
@@ -124,9 +131,14 @@ func game_over():
 	get_tree().change_scene_to_file("res://scenes/game_over.tscn")
 	pass
 
-# --- LOOP MANAGEMENT ---
+func master_save():
+	#pause game
+	emit_signal("save")
+	var file = FileAccess.open("res://data/state", FileAccess.WRITE)
+	if file:
+		file.store(JSON.stringify({"biome":currentBiome,"node":node_index}))
 
-func advance_loop():
-	current_loop += 1
+func advance_node():
+	currentBiome += 1
 	node_index = 0
 	enter_map_phase()

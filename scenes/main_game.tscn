@@ -95,7 +95,6 @@ unique_name_in_owner = true
 [connection signal="card_play_failed" from="combatHandler" to="gameState/deckManager" method="_on_combat_handler_card_play_failed"]
 [connection signal="card_play_success" from="combatHandler" to="gameState/deckManager" method="_on_combat_handler_card_play_success"]
 [connection signal="addCard" from="RewardsHandler" to="gameState/deckManager" method="_on_add_card"]
-[connection signal="phase_changed" from="gameState" to="combatHandler" method="_on_game_state_phase_changed"]
 [connection signal="save" from="gameState" to="gameState/playerStats" method="_on_game_state_save"]
 [connection signal="save" from="gameState" to="gameState/deckManager" method="_on_game_state_save"]
 [connection signal="save" from="gameState" to="gameState/collectiblesManager" method="_on_game_state_save"]

@@ -10,8 +10,10 @@ class_name EnemyData
 @export var status_effects: Dictionary = {}
 @export var dmg_buff :=0
 @export var poison :=0
+@export var block :=0
 
 enum Intent {attack,block,inflict,heal,buff}
+enum Inflictions{vulnerable,poison,weaken}
 
 func get_next_intent() -> Dictionary:
 	if intents.is_empty():
@@ -22,6 +24,9 @@ func get_next_intent() -> Dictionary:
 	var intent = intents[intent_index]
 	intent_index += 1
 	return intent
+
+func heal(hp:int):
+	current_hp=min(current_hp+hp,max_hp)
 
 func take_damage(amount: int):
 	current_hp = max(current_hp - amount, 0)
