@@ -25,9 +25,6 @@ func _ready() -> void:
 		stats.set(Stat.current_hp,parsed.get(Stat.current_hp))
 		stats.set(Stat.gold,parsed.get(Stat.gold))
 
-func set_stats(new_stats: Dictionary[Stat,int]):
-	stats=new_stats.duplicate()
-
 func gain_gold(amount: int):
 	stats.set(Stat.gold, stats.get(Stat.gold)+amount)
 

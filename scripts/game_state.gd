@@ -1,5 +1,5 @@
 extends Node2D
-
+class_name game_state
 #directs the game flow
 
 # --- Signals ---
@@ -96,7 +96,7 @@ func _on_rewards_claimed(rewards):
 func _on_map_done(nextPhase: Phase, enemy_data = null, event_data = null):
 	phase=nextPhase
 	node_index += 1
-	emit_signal("node_advanced", phase, current_loop, node_index)
+	%mapHandler.advance_node()
 	match phase:
 		Phase.COMBAT:
 			enter_combat_phase(enemy_data)
@@ -121,7 +121,7 @@ func collect_rewards(rewards):
 	emit_signal("rewards_given", rewards)
 
 func game_over():
-	#%UIOverlay.do smt		#TODO:Implement game over logic here (show screen, save stats, etc.)
+	get_tree().change_scene_to_file("res://scenes/game_over.tscn")
 	pass
 
 # --- LOOP MANAGEMENT ---
@@ -129,55 +129,4 @@ func game_over():
 func advance_loop():
 	current_loop += 1
 	node_index = 0
-	enter_map_phase()
-
-# --- PLAYER/DECK INTERFACE ---
-
-func update_player_stats(new_stats: Dictionary):
-	if player_stats.has_method("set_stats"):
-		player_stats.set_stats(new_stats)
-		emit_signal("player_stats_changed", player_stats.get_stats())
-
-func get_player_stats() -> Dictionary:
-	if player_stats.has_method("get_stats"):
-		return player_stats.get_stats()
-	return {}
-
-func get_deck() -> Array:
-	if deck_manager.has_method("get_deck"):
-		return deck_manager.get_deck()
-	return []
-
-func add_to_deck(card_id: String):
-	if deck_manager.has_method("add_card"):
-		deck_manager.add_card(card_id)
-		emit_signal("deck_changed", deck_manager.get_deck())
-
-func get_collectibles() -> Array:
-	if collectibles_manager.has_method("get_all"):
-		return collectibles_manager.get_all()
-	return []
-
-# --- (OPTIONAL) SAVE/LOAD ---
-
-func save_game():
-
-	var save_data = {
-		"loop": current_loop,
-		"node_index": node_index,
-		"player_stats": player_stats.serialize() if player_stats.has_method("serialize") else {},
-		"deck": deck_manager.serialize() if deck_manager.has_method("serialize") else {},
-		"collectibles": collectibles_manager.serialize() if collectibles_manager.has_method("serialize") else {}
-	}
-	# Save to file logic here
-
-func load_game(save_data: Dictionary):
-	current_loop = save_data.get("loop", 1)
-	node_index = save_data.get("node_index", 0)
-	if player_stats.has_method("deserialize"):
-		player_stats.deserialize(save_data.get("player_stats", {}))
-	if deck_manager.has_method("deserialize"):
-		deck_manager.deserialize(save_data.get("deck", {}))
-	if collectibles_manager.has_method("deserialize"):
-		collectibles_manager.deserialize(save_data.get("collectibles", {}))
 	enter_map_phase()
